@@ -8,7 +8,6 @@ parameters:
       - java
       - nodejs
 
-
 name: chart-base pipeline
 trigger:
   branches:
