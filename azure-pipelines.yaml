@@ -1,12 +1,3 @@
-parameters:
-  - name: ChartName
-    displayName: ChartName
-    type: string
-    default: 'base'
-    values:
-      - base
-      - java
-      - nodejs
 
 name: chart-base pipeline
 trigger:
@@ -17,6 +8,7 @@ pr:
   branches:
     include:
       - master
+
 resources:
   repositories:
     - repository: cnp-library
@@ -29,15 +21,34 @@ jobs:
   - job: Validate
     pool:
       vmImage: 'Ubuntu 16.04'
+    strategy:
+      matrix:
+        java:
+          chartName: java
+        base:
+          chartName: base
+        nodejs:
+          chartName: nodejs
+
     steps:
       - template: steps/charts/validate.yaml@cnp-library
         parameters:
-          chartName: ${{ parameters.ChartName }}
+          chartName: $(chartName)
           chartReleaseName: chart-${{ parameters.ChartName }}-ci-test
           chartNamespace: chart-tests
           helmInstallTimeout: "500"
+          valuesFile: "ci-values-$(chartName).yaml"
+
 
   - job: Release
+    strategy:
+      matrix:
+        java:
+          chartName: java
+        base:
+          chartName: base
+        nodejs:
+          chartName: nodejs
     # Make sure we have a tag to run this job
     condition: >
       and(
@@ -50,6 +61,6 @@ jobs:
     steps:
       - template: steps/charts/release.yaml@cnp-library
         parameters:
-          chartName: ${{ parameters.ChartName }}
-          chartReleaseName: chart-${{ parameters.ChartName }}
+          chartName: $(chartName)
+          chartReleaseName: chart-$(chartName)
           chartNamespace: chart-tests
