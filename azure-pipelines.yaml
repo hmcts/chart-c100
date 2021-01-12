@@ -1,44 +1,36 @@
-parameters:
-  - name: ChartName
-    displayName: ChartName
-    type: string
-    default: 'base'
-    values:
-      - base
-      - java
-      - nodejs
+name: Nodejs Chart CI Pipeline
 
-name: chart-base pipeline
 trigger:
   branches:
     include:
     - refs/tags/*
+
 pr:
   branches:
     include:
     - master
+
 resources:
   repositories:
   - repository: cnp-library
     type: github
-    ref: refs/heads/master
     name: hmcts/cnp-azuredevops-libraries
-    endpoint: 'hmcts'
+    endpoint: hmcts
 
 jobs:
 - job: Validate
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: Ubuntu 16.04
   steps:
   - template: steps/charts/validate.yaml@cnp-library
     parameters:
-      chartName: ${{ parameters.ChartName }}
-      chartReleaseName: chart-java-ci-test
       chartNamespace: chart-tests
-      helmInstallTimeout: "500"
+      chartName: nodejs
+      chartReleaseName: chart-nodejs-ci-test
 
 - job: Release
-  # Make sure we have a tag to run this job
+  # Make sure we are on the master branch with a tag
+  # to trigger this job
   condition: >
     and(
         succeeded(),
@@ -46,10 +38,12 @@ jobs:
       )
   dependsOn: Validate
   pool:
-    vmImage: 'Ubuntu 16.04'
+    vmImage: Ubuntu 16.04
   steps:
   - template: steps/charts/release.yaml@cnp-library
     parameters:
-      chartName: ${{ parameters.ChartName }}
-      chartReleaseName: chart-java
       chartNamespace: chart-tests
+      chartName: nodejs
+      chartReleaseName: chart-nodejs
+
+      
