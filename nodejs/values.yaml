@@ -31,6 +31,10 @@ pdb:
   maxUnavailable: 50%
 global:
   enableKeyVaults: false
+  smoketestscron:
+    enabled: false
+  functionaltestscron:
+    enabled: false
 prometheus:
   enabled: false
   path: /metrics
