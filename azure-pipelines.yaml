@@ -1,49 +1,55 @@
-name: Nodejs Chart CI Pipeline
+parameters:
+  - name: ChartName
+    displayName: ChartName
+    type: string
+    default: 'base'
+    values:
+      - base
+      - java
+      - nodejs
 
+name: chart-base pipeline
 trigger:
   branches:
     include:
-    - refs/tags/*
-
+      - refs/tags/*
 pr:
   branches:
     include:
-    - master
-
+      - master
 resources:
   repositories:
-  - repository: cnp-library
-    type: github
-    name: hmcts/cnp-azuredevops-libraries
-    endpoint: hmcts
+    - repository: cnp-library
+      type: github
+      ref: refs/heads/master
+      name: hmcts/cnp-azuredevops-libraries
+      endpoint: 'hmcts'
 
 jobs:
-- job: Validate
-  pool:
-    vmImage: Ubuntu 16.04
-  steps:
-  - template: steps/charts/validate.yaml@cnp-library
-    parameters:
-      chartNamespace: chart-tests
-      chartName: nodejs
-      chartReleaseName: chart-nodejs-ci-test
+  - job: Validate
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+      - template: steps/charts/validate.yaml@cnp-library
+        parameters:
+          chartName: ${{ parameters.ChartName }}
+          chartReleaseName: chart-${{ parameters.ChartName }}-ci-test
+          chartNamespace: chart-tests
+          helmInstallTimeout: "500"
 
-- job: Release
-  # Make sure we are on the master branch with a tag
-  # to trigger this job
-  condition: >
-    and(
-        succeeded(),
-        startsWith(variables['Build.SourceBranch'], 'refs/tags/')
-      )
-  dependsOn: Validate
-  pool:
-    vmImage: Ubuntu 16.04
-  steps:
-  - template: steps/charts/release.yaml@cnp-library
-    parameters:
-      chartNamespace: chart-tests
-      chartName: nodejs
-      chartReleaseName: chart-nodejs
-
-      
+  - job: Release
+    # Make sure we have a tag to run this job
+    condition: >
+      and(
+          succeeded(),
+          startsWith(variables['Build.SourceBranch'], 'refs/tags/')
+        )
+    dependsOn: Validate
+    pool:
+      vmImage: 'Ubuntu 16.04'
+    steps:
+      - template: steps/charts/release.yaml@cnp-library
+        parameters:
+          chartName: ${{ parameters.ChartName }}
+          chartReleaseName: chart-${{ parameters.ChartName }}
+          chartNamespace: chart-tests
