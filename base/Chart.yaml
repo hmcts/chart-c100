@@ -6,9 +6,7 @@ name: base
 version: 0.1.0 # Do not change
 appVersion: 0.1.0 # Do not change
 keywords:
-  - node
-  - javascript
-  - nodejs
+  - base
 sources:
   - https://github.com/hmcts/chart-base
 icon: https://nodejs.org/static/images/logos/nodejs-new-pantone-black.png
