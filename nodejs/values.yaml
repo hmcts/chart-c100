@@ -38,3 +38,12 @@ ingressClass: traefik
 
 autoscaling:
   enabled: false
+
+smoketests:
+  enabled: false
+functionaltests:
+  enabled: false
+smoketestscron:
+  enabled: false
+functionaltestscron:
+  enabled: false
