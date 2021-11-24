@@ -19,7 +19,7 @@ Example:
 ```
 language: java
 ```
-will override values from defaults with
+will override values from defaults with:
 ```
 java:
   key1: value1
