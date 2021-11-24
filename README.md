@@ -31,7 +31,7 @@ java:
 
 - Check [values.yaml](base/values.yaml) for default configuration.
 - Values defined under `language:` takes priority over base defaults.
-- Check additional configuration options for each template from [chart-library](https://github.com/hmcts/chart-library/)
+- Check additional configuration options for each template from [chart-library](https://github.com/hmcts/chart-library/).
 - If, values are configured for a specific language, they can only be overridden in language level.
 
   If [values.yaml](base/values.yaml) have defaults like below: 
