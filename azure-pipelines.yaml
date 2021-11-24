@@ -14,12 +14,16 @@ resources:
       type: github
       ref: refs/heads/master
       name: hmcts/cnp-azuredevops-libraries
-      endpoint: 'hmcts'
+      endpoint: 'hmcts (1)'
+
+variables:
+  - name: agentPool
+    value: ubuntu-latest
 
 jobs:
   - job: Validate
     pool:
-      vmImage: 'Ubuntu 18.04'
+      vmImage: ${{ variables.agentPool }}
     strategy:
       matrix:
         java:
@@ -46,7 +50,7 @@ jobs:
         )
     dependsOn: Validate
     pool:
-      vmImage: 'Ubuntu 18.04'
+      vmImage: ${{ variables.agentPool }}
     steps:
       - template: steps/charts/release.yaml@cnp-library
         parameters:
