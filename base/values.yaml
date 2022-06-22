@@ -24,7 +24,7 @@ startupPath: /health/liveness
 startupDelay: 5
 startupTimeout: 3
 startupPeriod: 10
-startupFailureThreshold: 3
+startupFailureThreshold: 15
 saEnabled: true
 devApplicationInsightsInstrumentKey: '00000000-0000-0000-0000-000000000000'
 imagePullPolicy: IfNotPresent
@@ -101,7 +101,8 @@ java:
   devcpuLimits: '2500m'
   readinessDelay: 0
   livenessDelay: 0
-  startupDelay: 5
+  startupDelay: 10
+  startupFailureThreshold: 20
   devApplicationInsightsInstrumentKeyName: AZURE_APPLICATIONINSIGHTS_INSTRUMENTATIONKEY
 
 #nodejs Overrides
