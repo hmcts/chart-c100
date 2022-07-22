@@ -28,6 +28,7 @@ startupFailureThreshold: 15
 saEnabled: true
 devApplicationInsightsInstrumentKey: '00000000-0000-0000-0000-000000000000'
 imagePullPolicy: IfNotPresent
+disableTraefikTls: true
 dnsConfig:
   ndots: "3"
   singleRequestTcp: false
